@@ -1,0 +1,1 @@
+input = open("../input/test/test-input1.txt", "r").read()
