@@ -1,4 +1,4 @@
-input = open("../input/test/test-input1.txt", "r").read()
+input = open("../input/input1.txt", "r").read()
 
 left_list = [ int(x.split("   ")[0]) for x in input.split("\n") ]
 right_list = [ int(x.split("   ")[1]) for x in input.split("\n") ]
