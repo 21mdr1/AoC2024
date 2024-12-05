@@ -27,28 +27,19 @@ def transpose(matrix: list[str]) -> list[str]:
 
 def diagonals(matrix: list[str]) -> list[str]:
 
-    right_leaning = []
+    items = len(matrix)
 
-    for total in range(len(matrix[0]) * 2):
-        curr = ""
-        for i in range(len(matrix[0])):
-            for j in range(len(matrix[0])):
-                if i + j == total:
-                    curr += matrix[i][j]
-        
-        right_leaning.append(curr)
+    right_leaning = \
+        [ ''.join([ matrix[i][total-i] for i in range(total + 1) ]) 
+            for total in range(items) ] + \
+        [ ''.join([ matrix[i][items - 1 + total - i] for i in range(total, items) ]) 
+            for total in range(1, items)]
 
-    left_leaning = []
-
-    for total in range(-len(matrix[0]) + 1, len(matrix[0])):
-        curr = ""
-
-        for i in range(len(matrix[0])):
-            for j in range(len(matrix[0])):
-                if i - j == total:
-                    curr += matrix[i][j]
-        
-        left_leaning.append(curr)
+    left_leaning = \
+        [ ''.join([ matrix[i][i+total] for i in range(items - abs(total)) ]) 
+            for total in range(items) ] + \
+        [ ''.join([ matrix[i][i-total] for i in range(total, items) ]) 
+            for total in range(1, items) ]
 
     return right_leaning + left_leaning
 
