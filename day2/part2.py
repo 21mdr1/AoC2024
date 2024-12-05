@@ -9,8 +9,6 @@ def print_result(func: Callable) -> Callable:
 
     return fn
 
-    # return lambda *args, **kwargs: print(func(*args, **kwargs))
-
 @print_result
 def test(routine: Callable[[str], int], day: int, answer: int) -> bool:
      return routine(f"../input/test/test-input{day}.txt") == answer
