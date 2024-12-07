@@ -1,5 +1,4 @@
 from utils import print_result, input_file, test
-from math import prod
 
 def parse_equation(equation: str):
     result, nums = equation.split(": ")
