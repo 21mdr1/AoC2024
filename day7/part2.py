@@ -23,6 +23,35 @@ def test_without_concat(equation) -> bool:
         
         if total == equation["result"]:
             return True
+    
+    return False
+
+def test_with_concat(equation) -> bool:
+    total_calcs = len(equation["nums"]) - 2
+    total_configs = 2 ** (total_calcs)
+
+    if total_configs <= 1:
+        return  equation["result"] == int(str(equation["nums"][0]) + str(equation["nums"][1]))
+
+    for config in range(total_configs):
+        config = bin(config)[2:].rjust(total_calcs, "0")
+
+        for spot in range(total_calcs + 1):
+            new_config = config[:spot] + "2" + config[spot:]
+            total = equation["nums"][0]
+
+            for i, num in enumerate(equation["nums"][1:]):
+                if new_config[i] == "0":
+                    total += num
+                elif new_config[i] == "1":
+                    total *= num
+                elif new_config[i] == "2":
+                    total = int(str(total) + str(num))
+
+            if total == equation["result"]:
+                return True
+    
+    return False
 
 @print_result
 def solve(input_file: str) -> int:
@@ -34,12 +63,13 @@ def solve(input_file: str) -> int:
     for equation in equations:
         if test_without_concat(equation):
             calibration_value += equation["result"]
-            continue
-
-        # code for concatenations
+        
+        elif test_with_concat(equation):
+            calibration_value += equation["result"]
 
     return calibration_value
 
 
 test(solve, 7, 11387)
 solve(input_file(7))
+# 6154475944263 is too low
