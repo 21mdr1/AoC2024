@@ -2,10 +2,9 @@ from utils import print_result, input_file, test, use_input_file
 
 @print_result
 @use_input_file
-def solve(input_file: str) -> int:
-    input = open(input_file, "r").read()
+def solve(input: str) -> int:
     return 0
 
 
 test(solve, input_file(_, True), _)
-solve(input_file(_))
+#solve(input_file(_))
