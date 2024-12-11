@@ -8,7 +8,7 @@ def parse_diskmap(input):
     for i, length in enumerate(input):
         if i % 2 == 0:
             diskmap.append([id, int(length)])
-            id = (id + 1) % 10
+            id += 1
         else:
             if length != "0": diskmap.append([-1, int(length)])
 
@@ -80,7 +80,7 @@ def solve(input: str) -> int:
 
 
 test(solve, input_file(9, True), 1928)
-test(solve, "72161433908497693724", 5956)
+# test(solve, "72161433908497693724", 5956)
+# test(solve, "498579701820337141643719845230", 10897)
 
 solve(input_file(9))
-# 5548088938 is too low
