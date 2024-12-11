@@ -1,4 +1,4 @@
-from utils import print_result, input_file, test
+from utils import print_result, input_file, test, use_input_file
 
 
 def parse_diskmap(input):
@@ -10,7 +10,7 @@ def parse_diskmap(input):
             diskmap.append([id, int(length)])
             id = (id + 1) % 10
         else:
-            diskmap.append([-1, int(length)])
+            if length != "0": diskmap.append([-1, int(length)])
 
     return diskmap
 
@@ -61,27 +61,26 @@ def checksum(diskmap):
     for block in diskmap:
         id, length = block
 
-        if id == -1:
-            position += length
-            continue
-
-        for _ in range(length):
-            checksum += (id * position)
-            position += 1
+        if id > 0:
+            checksum += (length * (2 * position + length - 1) * id // 2)
+        
+        position += length
 
     return checksum
 
 @print_result
-def solve(input_file: str) -> int:
-    input = open(input_file, "r").read().strip("\n")
-    diskmap = parse_diskmap(input)
-
+@use_input_file
+def solve(input: str) -> int:
+    diskmap = parse_diskmap(input.strip("\n"))
+    
     while can_move(diskmap):
         diskmap = move_last(diskmap)
 
     return checksum(diskmap)
 
 
-test(solve, 9, 1928)
+test(solve, input_file(9, True), 1928)
+test(solve, "72161433908497693724", 5956)
+
 solve(input_file(9))
 # 5548088938 is too low
