@@ -13,6 +13,17 @@ def print_result(func: Callable) -> Callable:
 
     return fn
 
+def use_input_file(func: Callable) -> Callable:
+
+    def fn(input, *args, **kwargs):
+        if input.startswith('../input'):
+            input = open(input, "r").read()
+
+        answer = func(input, *args, **kwargs)
+        return answer
+
+    return fn
+
 @print_result
-def test(routine: Callable[[str], int], day: int, answer: int) -> bool:
-    return routine(input_file(day, True)) == answer
+def test(routine: Callable[[str], int], input: str, answer: int) -> bool:
+    return routine(input) == answer
