@@ -1,4 +1,4 @@
-from utils import print_result, input_file, test
+from utils import print_result, input_file, test, use_input_file
 
 @print_result
 @use_input_file
