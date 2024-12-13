@@ -20,5 +20,5 @@ def solve(input: str) -> int:
     return len(stones)
 
 
-# test(solve, input_file(11, True), 55312)
+test(solve, input_file(11, True), 55312)
 solve(input_file(11))
