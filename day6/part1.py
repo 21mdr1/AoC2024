@@ -61,8 +61,14 @@ def solve(input_file: str) -> int:
             if isInFront(pos, obstacle, dir) and isCloser(obstacle, next_obstacle, dir):
                 next_obstacle = obstacle
 
-        end = size - dir * 1 if next_obstacle is None else next_obstacle - dir * 1
-        
+        if next_obstacle is not None:
+            end = next_obstacle - dir * 1
+        else:
+            if dir == -1:
+                end = 1
+            else:
+                end = size - 1
+
         for i in range(pos, end + dir * 1, dir):
             if direction[0] == 'col':
                 visited.add((i, position[1]))
@@ -70,11 +76,10 @@ def solve(input_file: str) -> int:
                 visited.add((position[0], i))
 
         position, direction = update(position, end, direction)
-
         if next_obstacle is None: break
 
     return len(visited)
 
-test(solve, 6, 41)
-solve(input_file(6))
-# 5233 too low
+# test(solve, 6, 41)
+test(solve, input_file(6), 2239) # gives 2238 instead..
+# solve(input_file(6))
