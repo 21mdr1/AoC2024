@@ -1,102 +1,80 @@
 from utils import print_result, input_file, test
 
-N = (0, 1)
-E = (1, 0)
-S = (0, -1)
-W = (-1, 0)
+N = ("col", -1)
+E = ("row", 1)
+S = ("col", 1)
+W = ("row", -1)
 
-turn = {
-    N: E,
-    E: S,
-    S: W,
-    W: N,
-}
+TURN = { N: E, E: S, S: W, W: N }
 
-class Map:
-    def __init__(self, map_):
-        self.lines = dict()
-        self.columns = dict()
-        self.guard_position = ()
-        self.parse_map(map_)
+def isInFront(position, obstacle, dir):
+    # a < b => -a > -b
+    return obstacle * dir > position * dir
 
-    def parse_map(self, map_):
-        width = len(map_)
-        height = len(map_[0])
+def isCloser(obstacle, next_obstacle, dir):
+    if next_obstacle is None:
+        return True
+    # a > b => -a < -b
+    return obstacle * dir < next_obstacle * dir
 
-        for (line, column) in [(a, b) for a in range(width) for b in range(height)]:
-            if map_[line][column] == '^':
-                self.guard_position = (line, column)
+def update(position, end, direction):
+    return (end, position[1]) if direction[0] == 'col' \
+                else (position[0], end) \
+                , TURN[direction]
 
-            elif map_[line][column] == '#':
-                self.lines.get(line, []).append(column)
-                self.columns.get(column, []).append(line)
-    
+def parse_map(map_):
+    size = len(map_)
+    col = dict(); row = dict()
 
-class Guard:
-    def __init__(self, position):
-        self.direction = N
-        self.position = position
-        self.distance_walked = 1
-        self.hit_edge = False
-    
-    def turn(self):
-        self.direction = turn[self.direction]
-    
-    def isInFront(self, obstacle):
-        position = self.position[abs(self.direction[0])]
-        direction = sum(self.direction)
+    for i, j in [ (x, y) for x in range(size) for y in range(size) ]:
+        if map_[i][j] == '#':
+            if i not in row:
+                row[i] = []
+            if j not in col:
+                col[j] = []
+            
+            row[i].append(j)
+            col[j].append(i)
+        elif map_[i][j] == '^':
+            position = (i, j)
 
-        return direction * obstacle >  direction * position
-        
-    def obstacles(self, map_):
-        # handle reversed stuff
-        if self.direction in [N, S]:
-            return map_.columns[self.position[1]]
-        if self.direction in [E, W]:
-            return map_.lines[self.position[0]]
-
-    def find_destination(self, map_):
-        obstacles = self.obstacles(map_)
-
-        hitObstacle = False
-
-        for obstacle in obstacles:
-            if self.isInFront(obstacle):
-                final_line = self.position[0] + (self.direction[0] * obstacle)
-                final_column = self.position[1] = (self.direction[1] * obstacle)
-                hitObstacle = True
-                break
-        
-        if not hitObstacle:
-            # then we hit the edge of the map
-            self.hit_edge = True
-            final_line = self.position[0]
-            final_column = self.positionp[1]
-
-        return final_line, final_column
-
-    def walk(self, map_):
-        self.turn()
-        destination = self.find_destination(map_)
-
-        distance_traveled = abs((self.position[0] - destination[0]) + (self.position[1] - destination[1]))
-        self.position = destination
-
-        self.distance_walked += distance_traveled
-
-        return distance_traveled
-
+    return row, col, position, N
 
 @print_result
 def solve(input_file: str) -> int:
-    obstacle_map = [ line.split('') for line in  open(input_file, "r").read().split("\n") ]
-    map_ = Map(obstacle_map)
-    guard = Guard(map_.guard_position)
+    map_ = open(input_file, "r").read().split("\n")
+    row, col, position, direction = parse_map(map_)
+    size = len(map_)
 
-    while not guard.hit_edge:
-        guard.walk(map_)
+    visited = { position }
 
-    return guard.distance_walked
+    while True:
+        next_obstacle = None
+        if direction[0] == "col": # N or S
+            obstacles = col.get(position[1], [])
+            pos = position[0]; dir = direction[1]
+        else: # E or W
+            obstacles = row.get(position[0], [])
+            pos = position[1]; dir = direction[1]
+
+        for obstacle in obstacles:
+            if isInFront(pos, obstacle, dir) and isCloser(obstacle, next_obstacle, dir):
+                next_obstacle = obstacle
+
+        end = size - dir * 1 if next_obstacle is None else next_obstacle - dir * 1
+        
+        for i in range(pos, end + dir * 1, dir):
+            if direction[0] == 'col':
+                visited.add((i, position[1]))
+            else:
+                visited.add((position[0], i))
+
+        position, direction = update(position, end, direction)
+
+        if next_obstacle is None: break
+
+    return len(visited)
 
 test(solve, 6, 41)
 solve(input_file(6))
+# 5233 too low
