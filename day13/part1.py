@@ -1,5 +1,5 @@
 from utils import print_result, input_file, test, use_input_file
-from matrix import Matrix, inverse
+from matrix import Matrix
 import re
 
 def parse(machine):

@@ -121,15 +121,3 @@ class Matrix:
         if self.isSquare:
             return f'{self.a} {self.b}\n{self.c} {self.d}'
         return f'{self.a}\n{self.b}'
-    
-def determinant(matrix):
-    if not isinstance(matrix, Matrix):
-        return None
-    
-    return matrix.determinant()
-
-def inverse(matrix):
-    if not isinstance(matrix, Matrix):
-        return None
-    
-    return matrix.inverse()
