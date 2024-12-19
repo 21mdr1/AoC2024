@@ -35,6 +35,22 @@ class Matrix:
 
         return Matrix(matrix) / det
     
+    def inverse_without_det(self):
+        if not self.isInvertible():
+            return None
+
+        matrix = [
+            [ self.d, -1 * self.b ],
+            [ -1 * self.c, self.a ]
+        ]
+
+        return Matrix(matrix)
+
+    def isInt(self):
+        if self.isSquare:
+            return int(self.a) == self.a and int(self.b) == self.b and int(self.c) == self.c and int(self.d) == self.d
+        return int(self.a) == self.a and int(self.b) == self.b
+    
     def __mul__(self, other):
         if isinstance(other, int):
             if self.isSquare:

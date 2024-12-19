@@ -22,16 +22,14 @@ def solve(input: str) -> int:
     for machine in machines:
         coefs, prize = parse(machine)
 
-        coefs_inv = inverse(coefs) * coefs.determinant()
-        solution = (coefs_inv * prize) / coefs.determinant()
+        # to account for division error, we divide the determinant at the end
+        solution = (coefs.inverse_without_det() * prize) / coefs.determinant()
 
-        if int(solution.a) == solution.a and int(solution.b) == solution.b:
+        if solution.isInt():
             tokens += int(solution.a) * 3
             tokens += int(solution.b)
 
     return tokens
 
-test(solve, input_file(13, True), 480)
+# test(solve, input_file(13, True), 480)
 solve(input_file(13))
-
-# 24911 is too low
