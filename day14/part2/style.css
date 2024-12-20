@@ -1,0 +1,31 @@
+.main {
+    height: 100vh;
+    padding: 3rem;
+}
+  
+.slider {
+    width: 100%;
+}
+  
+.input {
+    display: flex;
+    column-gap: 1rem;
+    margin-bottom: 2rem;
+}
+  
+.box {
+    width: 2rem;
+}
+  
+.wrapper {
+    width: fit-content;
+    border: 3px solid black;
+    display: grid;
+    grid-template-columns: repeat(101, 5px);
+    grid-template-rows: repeat(103, 5px);
+    background-color:gainsboro;
+}
+  
+.robot {
+    background-color: brown;
+}
