@@ -51,18 +51,3 @@ function handleBoxChange(event) {
 
 slider.addEventListener('change', handleSliderChange);
 box.addEventListener('change', handleBoxChange);
-
-
-
-
-// {robots.map(robot => {
-//     let posx = ((robot.p[0] + (77+101*(76+103*time)) * robot.v[0]) % 101)
-//     let posy = ((robot.p[1] + (77+101*(76+103*time)) * robot.v[1]) % 103)
-    
-//     return (
-//       <div className="robot" style={{
-//         gridColumnStart: posx,
-//         gridRowStart: posy,
-//       }}></div>
-//     );
-//   })}
